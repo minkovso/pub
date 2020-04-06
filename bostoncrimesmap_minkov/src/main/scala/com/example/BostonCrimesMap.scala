@@ -3,6 +3,10 @@ package com.example
 object BostonCrimesMap extends App {
   import org.apache.spark.sql.SparkSession
   import org.apache.spark.sql.functions.{broadcast, count, sum, split, trim, array}
+  import org.apache.spark.sql.expressions.MutableAggregationBuffer
+  import org.apache.spark.sql.expressions.UserDefinedAggregateFunction
+  import org.apache.spark.sql.Row
+  import org.apache.spark.sql.types._
 
   val spark = SparkSession.builder.appName("App").getOrCreate()
   import spark.implicits._
@@ -10,6 +14,37 @@ object BostonCrimesMap extends App {
   val crime = args(0)
   val codes = args(1)
   val path = args(2)
+
+  class ListAgg_ extends UserDefinedAggregateFunction {
+
+     def inputSchema: StructType =
+      StructType(StructField("name_cnt", ArrayType(StringType)) :: Nil)
+
+     def bufferSchema: StructType =
+      StructType(StructField("names_cnt", ArrayType(ArrayType(StringType))) :: Nil)
+
+     def dataType: DataType = StringType
+
+     def deterministic: Boolean = true
+
+     def initialize(buffer: MutableAggregationBuffer): Unit = {
+      buffer(0) = Seq.empty[Seq[String]]
+    }
+
+     def update(buffer: MutableAggregationBuffer, input: Row): Unit = {
+      buffer(0) = buffer.getSeq(0) :+ input.getSeq(0)
+    }
+
+     def merge(buffer1: MutableAggregationBuffer, buffer2: Row): Unit = {
+      buffer1(0) = buffer1.getSeq(0) ++ buffer2.getSeq(0)
+    }
+
+     def evaluate(buffer: Row): Any = {
+      buffer.getSeq(0).sortWith((x: Seq[String], y: Seq[String]) => x(1).toInt > y(1).toInt).slice(0, 3).map((x: Seq[String]) => x.head).mkString(", ")
+    }
+  }
+
+  val listAgg = new ListAgg_()
 
   val crime_df = spark.read.option("header", "true").option("inferSchema", "true").csv(crime)
   val codes_df_raw = spark.read.option("header", "true").option("inferSchema", "true").csv(codes)
@@ -22,12 +57,12 @@ object BostonCrimesMap extends App {
     .withColumn("name_cnt", array($"name", $"count"))
     .createOrReplaceTempView("df_2_tmp")
 
-  spark.udf.register("list_agg", (r: Seq[Seq[String]]) => r.sortWith(_(1).toInt > _(1).toInt).slice(0, 3).map(_.head).mkString(", "))
+  spark.udf.register("listAgg", listAgg)
 
   val df_2 = spark.sql(
     "SELECT" +
     "  COALESCE(district, 'null') AS district" +
-    ", LIST_AGG(COLLECT_LIST(name_cnt)) AS frequent_crime_types " +
+    ", listAgg(name_cnt) AS frequent_crime_types " +
     "FROM" +
     "  df_2_tmp " +
     "GROUP BY" +
