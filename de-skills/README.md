@@ -137,11 +137,15 @@ sudo service postgresql restart
 
 Создаем роль, базу и таблицу  
 sudo -u postgres psql  
+```
 create user spark password 'spark';  
 create database spark owner spark;  
+```
 
 psql -U spark  
-create table stream (skill varchar(100), cnt integer, snap_date integer);  
+```
+create table stream (skill varchar(100), cnt integer, snap_date integer); 
+```
 
 ### grafana
 sudo add-apt-repository "deb https://packages.grafana.com/enterprise/deb stable main"  
