@@ -103,6 +103,8 @@ sudo wget -P /opt https://apache-mirror.rbc.ru/pub/apache/spark/spark-2.4.6/spar
 sudo tar -C /opt -xzf /opt/spark-2.4.6-bin-hadoop2.7.tgz && sudo rm /opt/spark-2.4.6-bin-hadoop2.7.tgz
 echo 'export SPARK_HOME=/opt/spark-2.4.6-bin-hadoop2.7' >> /etc/profile.d/global-env.sh
 echo 'export PATH=$PATH:$SPARK_HOME/bin' >> /etc/profile.d/global-env.sh
+cp /opt/spark-2.4.6-bin-hadoop2.7/conf/spark-env.sh.template /opt/spark-2.4.6-bin-hadoop2.7/conf/spark-env.sh
+echo "export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop" >> /opt/spark-2.4.6-bin-hadoop2.7/conf/spark-env.sh
 
 sudo adduser spark
 sudo -u spark mkdir /home/spark/stream
@@ -126,5 +128,11 @@ create database spark owner spark;
 
 psql -U spark
 create table stream (skill varchar(100), cnt integer, snap_date integer);
+
+Запуск скриптов
+sudo git clone https://github.com/minkovso/pub.git /opt/pub
+sudo chmod -R a+x /opt/pub/de-skills
+sudo -u spark python3 /opt/pub/de-skills/python/DeApp.py &
+sudo -u spark /opt/spark-2.4.6-bin-hadoop2.7/bin/spark-submit --class DeStream --master yarn --deploy-mode cluster --executor-memory 512m --num-executors 1 --executor-cores 1 --driver-memory 512m /opt/pub/de-skills/spark/destream_2.12-0.1.jar &
 
 
