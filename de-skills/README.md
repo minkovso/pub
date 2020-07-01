@@ -4,8 +4,7 @@
 ### Ubuntu server 18-04
 Обновляем репозиторий  
 sudo apt update  
-sudo apt upgrade  
-Файл для глобальных переменных системы (переменная PATH переопределяется в sudoers при использовании su или sudo)  
+sudo apt upgrade   
 sudo touch /etc/profile.d/global-env.sh && sudo chmod a+w /etc/profile.d/global-env.sh
 
 ### JAVA
