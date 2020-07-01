@@ -38,6 +38,7 @@ $HADOOP_HOME/etc/hadoop/core-site.xml:
 ```
     
 $HADOOP_HOME/etc/hadoop/hdfs-site.xml:
+```
 <configuration>
     <property>
         <name>dfs.replication</name>
@@ -52,17 +53,21 @@ $HADOOP_HOME/etc/hadoop/hdfs-site.xml:
         <value>/home/hadoop/data</value>
     </property>
 </configuration>
+```
 
 cp $HADOOP_HOME/etc/hadoop/mapred-site.xml.template $HADOOP_HOME/etc/hadoop/mapred-site.xml
 $HADOOP_HOME/etc/hadoop/mapred-site.xml:
+```
 <configuration>
     <property>
         <name>mapreduce.framework.name</name>
         <value>yarn</value>
     </property>
 </configuration>
+```
 
 $HADOOP_HOME/etc/hadoop/yarn-site.xml:
+```
 <configuration>
     <property>
         <name>yarn.nodemanager.aux-services</name>
@@ -81,6 +86,7 @@ $HADOOP_HOME/etc/hadoop/yarn-site.xml:
         <value>false</value>
     </property>
 </configuration>
+```
 
 Добавляем пользователя и нужные папки  
 sudo adduser hadoop  
@@ -123,10 +129,9 @@ sudo apt install postgresql-10
 
 Правим конфиги  
 /etc/postgresql/10/main/pg_hba.conf  
-есть
-local   all             all                                     peer  
-должно быть  
+```
 local   all             all                                     md5  
+```
 
 sudo service postgresql restart
 
