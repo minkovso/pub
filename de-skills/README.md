@@ -93,10 +93,12 @@ sudo -u hadoop /opt/hadoop-2.7.7/bin/hdfs namenode -format
 запускаем сервисы
 sudo -u hadoop /opt/hadoop-2.7.7/sbin/start-all.sh
 
-hdfs dfs -mkdir /user
-hdfs dfs -chmod 777 /user
-hdfs dfs -mkdir /user/stream
-hdfs dfs -chmod 777 /user/stream
+sudo -u hadoop /opt/hadoop-2.7.7/bin/hdfs dfs -mkdir /user
+sudo -u hadoop /opt/hadoop-2.7.7/bin/hdfs dfs -chmod 777 /user
+sudo -u hadoop /opt/hadoop-2.7.7/bin/hdfs dfs -mkdir /user/stream
+sudo -u hadoop /opt/hadoop-2.7.7/bin/hdfs dfs -chmod 777 /user/stream
+sudo -u hadoop /opt/hadoop-2.7.7/bin/hdfs dfs -mkdir /tmp
+sudo -u hadoop /opt/hadoop-2.7.7/bin/hdfs dfs -chmod 777 /tmp
 
 SPARK
 sudo wget -P /opt https://apache-mirror.rbc.ru/pub/apache/spark/spark-2.4.6/spark-2.4.6-bin-hadoop2.7.tgz
@@ -111,6 +113,7 @@ sudo -u spark mkdir /home/spark/stream
 sudo -u spark mkdir /home/spark/stream/tmp
 
 POSTGRESQL
+port 5432
 sudo apt install postgresql-10
 поправить конфиги
 /etc/postgresql/10/main/pg_hba.conf
@@ -133,6 +136,21 @@ create table stream (skill varchar(100), cnt integer, snap_date integer);
 sudo git clone https://github.com/minkovso/pub.git /opt/pub
 sudo chmod -R a+x /opt/pub/de-skills
 sudo -u spark python3 /opt/pub/de-skills/python/DeApp.py &
-sudo -u spark /opt/spark-2.4.6-bin-hadoop2.7/bin/spark-submit --class DeStream --master yarn --deploy-mode cluster --executor-memory 512m --num-executors 1 --executor-cores 1 --driver-memory 512m /opt/pub/de-skills/spark/destream_2.12-0.1.jar &
+sudo -u spark /opt/spark-2.4.6-bin-hadoop2.7/bin/spark-submit --class DeStream --master yarn --deploy-mode cluster --executor-memory 512m --num-executors 1 --executor-cores 1 --driver-memory 512m --driver-class-path /opt/pub/de-skills/spark/postgresql-42.2.14.jar --jars /opt/pub/de-skills/spark/postgresql-42.2.14.jar /opt/pub/de-skills/spark/destream_2.12-0.1.jar
 
+grafana
+sudo add-apt-repository "deb https://packages.grafana.com/enterprise/deb stable main"
+wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -
+sudo apt-get update
+sudo apt-get install grafana-enterprise
+sudo systemctl enable grafana-server.service
+sudo grafana-cli plugins install grafana-piechart-panel
+sudo systemctl start grafana-server
+
+logopass
+port 3000
+admin/admin
+добавить source
+
+dashboard setting
 
