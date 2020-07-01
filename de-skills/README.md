@@ -1,19 +1,19 @@
 ![Концептуальная схема](https://github.com/minkovso/pub/blob/master/de-skills/images/concept.png)
 ![Физическая схема](https://github.com/minkovso/pub/blob/master/de-skills/images/phys.png)
 
-###Ubuntu server 18-04
+### Ubuntu server 18-04
 Обновляем репозиторий  
 sudo apt update  
 sudo apt upgrade  
 Файл для глобальных переменных системы (переменная PATH переопределяется в sudoers при использовании su или sudo)  
 sudo touch /etc/profile.d/global-env.sh && sudo chmod a+w /etc/profile.d/global-env.sh
 
-###JAVA
+### JAVA
 sudo apt install openjdk-8-jdk  
 echo 'export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64' >> /etc/profile.d/global-env.sh  
 echo 'export PATH=$PATH:$JAVA_HOME/bin' >> /etc/profile.d/global-env.sh  
 
-###HDP
+### HDP
 sudo wget -P /opt https://archive.apache.org/dist/hadoop/common/hadoop-2.7.7/hadoop-2.7.7.tar.gz  
 sudo tar -C /opt -xzf /opt/hadoop-2.7.7.tar.gz && sudo rm /opt/hadoop-2.7.7.tar.gz
 
@@ -28,13 +28,14 @@ echo 'export YARN_LOG_DIR=/home/hadoop/logs' >> /opt/hadoop-2.7.7/etc/hadoop/yar
 
 Добавляем в конфигурационные файлы следующие настройки  
 $HADOOP_HOME/etc/hadoop/core-site.xml:
+'''
 <configuration>
     <property>
         <name>fs.defaultFS</name>
         <value>hdfs://localhost:9000</value>
     </property>
 </configuration>
-
+'''
 $HADOOP_HOME/etc/hadoop/hdfs-site.xml:
 <configuration>
     <property>
@@ -103,7 +104,7 @@ sudo -u hadoop /opt/hadoop-2.7.7/bin/hdfs dfs -chmod 777 /user/stream
 sudo -u hadoop /opt/hadoop-2.7.7/bin/hdfs dfs -mkdir /tmp  
 sudo -u hadoop /opt/hadoop-2.7.7/bin/hdfs dfs -chmod 777 /tmp  
 
-###SPARK
+### SPARK
 sudo wget -P /opt https://apache-mirror.rbc.ru/pub/apache/spark/spark-2.4.6/spark-2.4.6-bin-hadoop2.7.tgz  
 sudo tar -C /opt -xzf /opt/spark-2.4.6-bin-hadoop2.7.tgz && sudo rm /opt/spark-2.4.6-bin-hadoop2.7.tgz  
 
@@ -116,7 +117,7 @@ sudo adduser spark
 sudo -u spark mkdir /home/spark/stream  
 sudo -u spark mkdir /home/spark/stream/tmp  
 
-###POSTGRESQL
+### POSTGRESQL
 sudo apt install postgresql-10  
 
 Правим конфиги  
@@ -136,7 +137,7 @@ create database spark owner spark;
 psql -U spark  
 create table stream (skill varchar(100), cnt integer, snap_date integer);  
 
-###grafana
+### grafana
 sudo add-apt-repository "deb https://packages.grafana.com/enterprise/deb stable main"  
 wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add -  
 sudo apt-get update  
@@ -151,7 +152,7 @@ sudo systemctl start grafana-server
 Настраиваем дашборд
 ![Dash](https://github.com/minkovso/pub/blob/master/de-skills/images/grafana.png)
 
-###Запуск скриптов
+### Запуск скриптов
 sudo git clone https://github.com/minkovso/pub.git /opt/pub  
 sudo chmod -R a+x /opt/pub/de-skills  
 
