@@ -1,3 +1,5 @@
+https://drive.google.com/file/d/18_JQYzbdUm29jXfm_xcG8OOZVLWVr2ky/view?usp=sharing
+
 Устаналиваем Ubuntu server 18-04
 Обновляем репозиторий
 sudo apt update
