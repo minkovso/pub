@@ -1,4 +1,5 @@
-![Концептуальная схема ](https://drive.google.com/file/d/18_JQYzbdUm29jXfm_xcG8OOZVLWVr2ky/view?usp=sharing)
+![Концептуальная схема ]()
+
 
 Устаналиваем Ubuntu server 18-04
 Обновляем репозиторий
