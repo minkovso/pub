@@ -1,8 +1,7 @@
 ![Концептуальная схема](https://github.com/minkovso/pub/blob/master/de-skills/images/concept.png)
 ![Физическая схема](https://github.com/minkovso/pub/blob/master/de-skills/images/phys.png)
 
-### Ubuntu server 18-04
-Обновляем репозиторий  
+### Ubuntu server 18-04 
 sudo apt update  
 sudo apt upgrade   
 sudo touch /etc/profile.d/global-env.sh && sudo chmod a+w /etc/profile.d/global-env.sh
@@ -119,6 +118,7 @@ echo 'export PATH=$PATH:$SPARK_HOME/bin' >> /etc/profile.d/global-env.sh
 cp /opt/spark-2.4.6-bin-hadoop2.7/conf/spark-env.sh.template /opt/spark-2.4.6-bin-hadoop2.7/conf/spark-env.sh  
 echo "export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop" >> /opt/spark-2.4.6-bin-hadoop2.7/conf/spark-env.sh  
 
+Добавляем пользователя и нужные папки  
 sudo adduser spark  
 sudo -u spark mkdir /home/spark/stream  
 sudo -u spark mkdir /home/spark/stream/tmp  
