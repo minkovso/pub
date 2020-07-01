@@ -28,12 +28,14 @@ echo 'export YARN_LOG_DIR=/home/hadoop/logs' >> /opt/hadoop-2.7.7/etc/hadoop/yar
 
 Добавляем в конфигурационные файлы следующие настройки  
 $HADOOP_HOME/etc/hadoop/core-site.xml:
-    <configuration>
-        <property>
-            <name>fs.defaultFS</name>
-            <value>hdfs://localhost:9000</value>
-        </property>
-    </configuration>
+```
+<configuration>
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://localhost:9000</value>
+    </property>
+</configuration>
+```
     
 $HADOOP_HOME/etc/hadoop/hdfs-site.xml:
 <configuration>
