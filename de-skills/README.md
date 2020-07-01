@@ -1,4 +1,4 @@
-![Концептуальная схема ]()
+![Концептуальная схема ](https://github.com/minkovso/pub/blob/master/de-skills/images/concept.png)
 
 
 Устаналиваем Ubuntu server 18-04
